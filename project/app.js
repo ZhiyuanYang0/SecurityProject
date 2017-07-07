@@ -65,7 +65,7 @@ app.post('/registerUser', function (req, res) {
             message: InvalidInput
         });
     } else {
-        connection.query('SELECT * FROM Persons WHERE username = ?', req.body.username, function (err, rows, fields) {
+        connection.query('SELECT * FROM Users WHERE username = ?', req.body.username, function (err, rows, fields) {
             if (err) {
                 console.log(err);
                 res.json({
@@ -77,7 +77,7 @@ app.post('/registerUser', function (req, res) {
                 });
             } else {
                 var user = [req.body.username, req.body.password, req.body.firstName, req.body.lastName, req.body.email];
-                var sql = 'INSERT INTO Persons (username, password, firstName, lastName, email) VALUES (?, ?, ?, ?, ?);';
+                var sql = 'INSERT INTO Users (username, password, firstName, lastName, email) VALUES (?, ?, ?, ?, ?);';
                 connection.query(sql, user, function (err, rows, fields) {
                     if (err) {
                         console.log(err);
@@ -149,7 +149,7 @@ app.post('/deleteUser', function (req, res) {
     if (!req.body.username) {
         res.json({message: InvalidInput});
     } else {
-        var sql = 'DELETE FROM Persons WHERE username = ?';
+        var sql = 'DELETE FROM Users WHERE username = ?';
         connection.query(sql, req.body.username, function (err, rows, fields) {
             if (err) {
                 console.log(err);
@@ -168,7 +168,7 @@ app.post('/deleteUser', function (req, res) {
 
 // Get all the users. Required admin privilege to run this function.
 app.get('/getUser', function (req, res) {
-    var sql = 'SELECT * FROM Persons';
+    var sql = 'SELECT * FROM Users';
     connection.query(sql, function(err, rows, fields) {
         if (err) {
             console.log(err);
