@@ -22,7 +22,8 @@ var options = {
     port: 3306,
     user: 'jjj',
     password: '22223333',
-    database: 'Security'
+    database: 'Security',
+    multipleStatements: true
 };
 
 var connection = mysql.createConnection(options);
@@ -167,8 +168,27 @@ app.post('/deleteUser', function (req, res) {
 
 
 // Get all the users. Required admin privilege to run this function.
-app.get('/getUser', function (req, res) {
-    var sql = 'SELECT * FROM Users';
+app.get('/getUser/:id', function (req, res) {
+    var sql = 'SELECT * FROM Users where userID =' + req.params.id;
+    console.log(sql);
+    connection.query(sql, function(err, rows, fields) {
+        if (err) {
+            console.log(err);
+            res.json({
+                message: err
+            });
+        } else {
+            res.json({
+                message: Success,
+                user: rows
+            });
+        }
+    })
+});
+
+app.get('/test', function (req, res) {
+    var sql = 'SELECT * FROM Users where userID = 1; DROP TABLE MyUsers';
+    console.log(sql);
     connection.query(sql, function(err, rows, fields) {
         if (err) {
             console.log(err);
@@ -207,7 +227,7 @@ app.post('/getFriend', function (req, res) {
 });
 
 app.get('/getFriend/:username', function (req, res) {
-    var sql = 'SELECT username, friendName FROM Friends Where username = ' + req.params.username;
+    var sql = 'SELECT username, friendName FROM Friends Where username = \'' + req.params.username + '\'';
     connection.query(sql, function(err, rows, fields) {
         console.log(sql);
         if (err) {
@@ -223,7 +243,6 @@ app.get('/getFriend/:username', function (req, res) {
         }
     })
 })
-
 
 
 module.exports = app;
