@@ -6,6 +6,8 @@ var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var session = require('express-session');
 var MySQLStore = require('express-mysql-session')(session);
+var querystring = require('querystring');
+var url = require('url');
 
 // mysql connection
 // var options = {
@@ -187,21 +189,13 @@ app.get('/getUser/:id', function (req, res) {
 });
 
 app.get('/test', function (req, res) {
-    var sql = 'SELECT * FROM Users where userID = 1; DROP TABLE MyUsers';
+    var sql = 'SELECT * FROM Users where userID = ' + req.params.id;
     console.log(sql);
-    connection.query(sql, function(err, rows, fields) {
-        if (err) {
-            console.log(err);
-            res.json({
-                message: err
-            });
-        } else {
-            res.json({
-                message: Success,
-                user: rows
-            });
-        }
-    })
+    query= url.parse(req.url).query;
+    //console.log('query' + query);
+    var result = querystring.parse(query);
+    console.log(result);
+    res.send(result);
 });
 
 // Get all the friends that the current user have.
