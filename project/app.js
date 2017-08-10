@@ -198,7 +198,6 @@ app.get('/test', function (req, res) {
     res.send(result);
 });
 
-// Get all the friends that the current user have.
 app.post('/getFriend', function (req, res) {
     if(!req.body.username) {
         res.json({message: InvalidInput});
@@ -211,10 +210,7 @@ app.post('/getFriend', function (req, res) {
                     message: err
                 });
             } else {
-                res.json({
-                    message: Success,
-                    user: rows
-                });
+                res.json(rows);
             }
         })
     }
@@ -230,10 +226,7 @@ app.get('/getFriend/:username', function (req, res) {
                 message: err
             });
         } else {
-            res.json({
-                message: Success,
-                user: rows
-            });
+            res.send(rows);
         }
     })
 })
