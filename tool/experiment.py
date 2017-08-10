@@ -1,3 +1,5 @@
+import os
+import sys
 import urllib2
 import httplib
 import json as js
@@ -63,3 +65,14 @@ class ex1(object):
 #
 # localhost:3000/getFriend/user1'; SELECT DATABASE(); --%20
 # localhost:3000/getFriend/user1'; SHOW TABLES; --%20
+
+
+commands = {
+    'command1': ex1.check_stack_query,
+    'command2': ex1.check_if_database_error_exposed
+}
+
+if __name__ == '__main__':
+    command = os.path.basename(sys.argv[0])
+    if command in commands:
+        commands[command](*sys.argv[1:])
