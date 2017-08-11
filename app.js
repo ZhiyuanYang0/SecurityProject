@@ -222,9 +222,9 @@ app.get('/getFriend/:username', function (req, res) {
         console.log(sql);
         if (err) {
             console.log(err);
-            res.json({
+            res.status(400).send([{
                 message: err
-            });
+            }]);
         } else {
             res.send(rows);
         }
