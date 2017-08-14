@@ -95,7 +95,7 @@ def check_time_based_attack(url):
 
 
 def help_info():
-    usage = 'Usage: python experiment.py [URL] [-Option]'
+    usage = 'Usage: python experiment.py [-Option] [URL]'
     helper = "'-b': check_boolean_based_attack\n" \
         "'-s': check_stack_query\n" \
         "'-e': check__error_based_attack\n" \
@@ -123,7 +123,7 @@ if __name__ == '__main__':
         command = os.path.basename(sys.argv[1])
         if command in commands:
             commands[command](sys.argv[2])
-            
+
 
 # online = "https://my-securitytest.herokuapp.com/getFriend/user1"
 # local = "http://localhost:3000/getFriend/user1"
