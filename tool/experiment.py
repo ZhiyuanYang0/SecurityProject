@@ -133,8 +133,8 @@ if __name__ == '__main__':
         if sys.argv[1] == '-h':
             help_info()
         else:
-            print 'Usage: python experiment.py [URL] [-Option]'
+            print 'Usage: python experiment.py [-Option] [URL]'
     else:
-        command = os.path.basename(sys.argv[2])
+        command = os.path.basename(sys.argv[1])
         if command in commands:
-            commands[command](sys.argv[1])
+            commands[command](sys.argv[2])
